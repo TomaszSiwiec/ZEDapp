@@ -23,22 +23,23 @@ repositories {
 }
 
 dependencies {
-    implementation 'org.springframework.boot:spring-boot-starter-data-jdbc'
-    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-    implementation 'org.springframework.boot:spring-boot-starter-data-rest'
-    implementation 'org.springframework.boot:spring-boot-starter-jdbc'
-    implementation 'org.springframework.boot:spring-boot-starter-security'
-    implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
-    implementation 'org.springframework.boot:spring-boot-starter-web'
-    implementation 'org.springframework.boot:spring-boot-starter-web-services'
-    compileOnly 'org.projectlombok:lombok'
-    developmentOnly 'org.springframework.boot:spring-boot-devtools'
+    implementation 'org.springframework.boot:spring-boot-starter-data-jdbc:2.2.4.RELEASE'
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa:2.2.4.RELEASE'
+    implementation 'org.springframework.boot:spring-boot-starter-data-rest:2.2.4.RELEASE'
+    implementation 'org.springframework.boot:spring-boot-starter-jdbc:2.2.4.RELEASE'
+    implementation 'org.springframework.boot:spring-boot-starter-security:2.2.4.RELEASE'
+    implementation 'org.springframework.boot:spring-boot-starter-thymeleaf:2.2.4.RELEASE'
+    implementation 'org.springframework.boot:spring-boot-starter-web:2.2.4.RELEASE'
+    implementation 'org.springframework.boot:spring-boot-starter-web-services:2.2.4.RELEASE'
+    compileOnly 'org.projectlombok:lombok:1.18.10'
+    developmentOnly 'org.springframework.boot:spring-boot-devtools:2.2.4.RELEASE'
     runtimeOnly 'mysql:mysql-connector-java'
-    annotationProcessor 'org.projectlombok:lombok'
-    testImplementation('org.springframework.boot:spring-boot-starter-test') {
+    annotationProcessor 'org.projectlombok:lombok:1.18.10'
+    testImplementation('org.springframework.boot:spring-boot-starter-test:2.2.4.RELEASE') {
         exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
     }
     testImplementation 'org.springframework.security:spring-security-test'
+    testImplementation group: 'com.h2database', name: 'h2', version: '1.4.200'
 }
 
 test {
