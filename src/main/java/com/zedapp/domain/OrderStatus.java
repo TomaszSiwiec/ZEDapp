@@ -1,6 +1,6 @@
 package com.zedapp.domain;
 
-public enum Status {
+public enum OrderStatus {
     ENTERED,
     IN_DEVELOPMENT,
     IN_PRODUCTION,

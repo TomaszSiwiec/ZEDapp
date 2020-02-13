@@ -10,21 +10,23 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import java.util.List;
+import java.time.LocalDate;
 
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "ELEMENTS")
-public class Element {
+@Table(name = "USERS")
+public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
+    private String username;
+    private String password;
+    private String mail;
     private String name;
-    private String destination;
-    private OrderStatus status;
-    private List<File> files;
-    private List<Order> orders;
+    private String lastname;
+    private LocalDate dateOfBirth;
+    private UserStatus status;
 }

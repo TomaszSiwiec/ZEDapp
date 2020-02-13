@@ -28,4 +28,5 @@ public class Order {
     private LocalDateTime dateOfCreation;
     private List<Element> elements;
     private Purchaser purchaser;
+    private User addedBy;
 }
