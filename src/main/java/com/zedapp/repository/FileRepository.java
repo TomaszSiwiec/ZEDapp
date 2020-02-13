@@ -4,5 +4,5 @@ import com.zedapp.domain.File;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface fileRepository extends GenericRepository<File> {
+public interface FileRepository extends GenericRepository<File> {
 }
