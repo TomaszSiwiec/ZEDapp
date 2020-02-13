@@ -1,6 +1,10 @@
 # ZEDapp
 
 That project contains REST application which is backend part of order management application.
+Application allows us to manage orders, companies, customers and all documents which relate to our orders.
+Data is collected in MySQL database. Application can create cnc programmes for standard elements, cad drawings,
+pdf files and store that in specific place such as: Google drive, ftp server, local memory etc.
+
 
 Technologies:
 * Java 11
@@ -24,11 +28,14 @@ To run the project you need:
 * Java 11
 * Gradle 6.0.1
 
+
 ## How to run it
 
 Steps to run that project:
 
-####1. Open intellij and create project from version controll.
+
+####1. Open intellij and create project from version control.
+
 
 ####2. Clean project
 
@@ -42,6 +49,7 @@ Windows:
 gradlew clean
 ```
 
+
 ####3. Build project
 
 Linux/MacOS:
@@ -53,6 +61,7 @@ Windows:
 ```
 gradlew build
 ```
+
 
 ####4. Run project
 
@@ -66,17 +75,22 @@ Windows:
 gradlew bootRun
 ```
 
+
 ## Endpoints
 
 Coming soon...
+
 
 ## Development
 
 Coming soon...
 
+
 ## Troubleshooting
 
 Coming soon...
+
+
 ## Authors
 
 * **Tomasz Siwiec** - [TomaszSiwiec](https://github.com/TomaszSiwiec)
