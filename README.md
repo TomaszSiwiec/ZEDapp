@@ -34,10 +34,10 @@ To run the project you need:
 Steps to run that project:
 
 
-####1. Open intellij and create project from version control.
+#### 1. Open intellij and create project from version control.
 
 
-####2. Clean project
+#### 2. Clean project
 
 Linux/MacOS:
 ```
@@ -50,7 +50,7 @@ gradlew clean
 ```
 
 
-####3. Build project
+#### 3. Build project
 
 Linux/MacOS:
 ```
@@ -63,7 +63,7 @@ gradlew build
 ```
 
 
-####4. Run project
+#### 4. Run project
 
 Linux/MacOS:
 ```
