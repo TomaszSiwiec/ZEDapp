@@ -12,7 +12,6 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 public class OrderDto {
-    private long id;
     private String name;
     private String comments;
     private LocalDateTime dateOfCreation;
