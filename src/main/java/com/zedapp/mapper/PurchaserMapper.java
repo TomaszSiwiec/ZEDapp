@@ -3,11 +3,13 @@ package com.zedapp.mapper;
 import com.zedapp.domain.Purchaser;
 import com.zedapp.domain.Purchaser;
 import com.zedapp.domain.dto.PurchaserDto;
+import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Component
 public class PurchaserMapper {
     public PurchaserDto mapToDto(Purchaser purchaser) {
         if (purchaser == null)
