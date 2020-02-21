@@ -2,11 +2,13 @@ package com.zedapp.mapper;
 
 import com.zedapp.domain.Order;
 import com.zedapp.domain.dto.OrderDto;
+import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Component
 public class OrderMapper {
     public OrderDto mapToDto(Order order) {
         if (order == null)

@@ -2,11 +2,13 @@ package com.zedapp.mapper;
 
 import com.zedapp.domain.Element;
 import com.zedapp.domain.dto.ElementDto;
+import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Component
 public class ElementMapper {
     public ElementDto mapToDto(Element element) {
         if (element == null)
