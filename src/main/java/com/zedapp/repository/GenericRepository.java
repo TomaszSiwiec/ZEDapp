@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Optional;
 
 @NoRepositoryBean
-public interface GenericRepository<T> extends CrudRepository<T, Integer> {
+public interface GenericRepository<T> extends CrudRepository<T, Long> {
     @Override
     List<T> findAll();
 
