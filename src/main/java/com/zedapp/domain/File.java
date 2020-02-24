@@ -5,11 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.util.List;
 
 @Getter
@@ -22,8 +18,18 @@ public class File {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
+
     private String filename;
+
     private String uuid;
+
     private String documentType;
+
+    @ManyToMany(cascade = CascadeType.PERSIST)
+    @JoinTable(
+            name = "JOIN_ELEMENTS_FILES",
+            joinColumns = {@JoinColumn(name = "FILES_ID",referencedColumnName = "ID")},
+            inverseJoinColumns = {@JoinColumn(name = "ELEMENTS_ID", referencedColumnName = "ID")}
+    )
     private List<Element> elements;
 }

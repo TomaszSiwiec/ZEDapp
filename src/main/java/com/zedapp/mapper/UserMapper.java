@@ -35,7 +35,8 @@ public class UserMapper {
                 userDto.getName(),
                 userDto.getLastname(),
                 userDto.getDateOfBirth(),
-                userDto.getStatus()
+                userDto.getStatus(),
+                null
         );
     }
 
