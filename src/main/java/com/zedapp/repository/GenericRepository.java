@@ -20,7 +20,7 @@ public interface GenericRepository<T> extends CrudRepository<T, Long> {
     void delete(T entity);
 
     default T findOrThrow(long id) throws EntityNotFoundException {
-        T object = findById(id).orElseThrow(() -> new EntityNotFoundException("Entity with id: " + " was not found!"));
+        T object = findById(id).orElseThrow(() -> new EntityNotFoundException("Entity with id: " + id + " was not found!"));
         return object;
     }
 }
