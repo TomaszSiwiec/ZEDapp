@@ -5,12 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.ManyToMany;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.util.List;
 
 @Getter
@@ -23,13 +18,28 @@ public class Company {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
+
     private String nip;
+
     private String name;
+
     private String street;
+
     private String buildingNumber;
+
     private String localNumber;
+
     private String zipCode;
+
     private String city;
+
     private String country;
+
+    @ManyToMany(cascade = CascadeType.PERSIST)
+    @JoinTable(
+            name = "JOIN_COMPANIES_PURCHASERS",
+            joinColumns = {@JoinColumn(name = "COMPANIES_ID", referencedColumnName = "ID")},
+            inverseJoinColumns = {@JoinColumn(name = "PURCHASERS_ID",referencedColumnName = "ID")}
+    )
     private List<Purchaser> purchasers;
 }

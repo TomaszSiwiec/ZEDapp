@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
 import javax.transaction.Transactional;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Transactional
@@ -30,8 +31,12 @@ public class OrderService {
         return orderMapper.mapToDto(order);
     }
 
-    public Order create(OrderDto orderDto) {
-        return orderRepository.save(orderMapper.mapToEntity(orderDto));
+    public OrderDto create(OrderDto orderDto) {
+        Order order = new Order();
+        order.setName(orderDto.getName());
+        order.setComments(orderDto.getComments());
+        order.setDateOfCreation(LocalDateTime.now());
+        return orderMapper.mapToDto(orderRepository.save(order));
     }
 
     public OrderDto update(long id, OrderDto orderDto) {
