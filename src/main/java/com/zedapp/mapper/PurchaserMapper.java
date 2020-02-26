@@ -3,6 +3,7 @@ package com.zedapp.mapper;
 import com.zedapp.domain.Purchaser;
 import com.zedapp.domain.Purchaser;
 import com.zedapp.domain.dto.PurchaserDto;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -11,12 +12,22 @@ import java.util.stream.Collectors;
 
 @Component
 public class PurchaserMapper {
+
+    @Autowired
+    private CompanyMapper companyMapper;
+
+    @Autowired
+    private OrderMapper orderMapper;
+
     public PurchaserDto mapToDto(Purchaser purchaser) {
         if (purchaser == null)
             return null;
         return new PurchaserDto(
+                purchaser.getId(),
                 purchaser.getName(),
-                purchaser.getLastname()
+                purchaser.getLastname(),
+                companyMapper.mapToDtoList(purchaser.getCompanies()),
+                orderMapper.mapToDtoList(purchaser.getOrders())
         );
     }
 
@@ -24,11 +35,11 @@ public class PurchaserMapper {
         if (purchaserDto == null)
             return null;
         return new Purchaser(
-                0L,
+                purchaserDto.getId(),
                 purchaserDto.getName(),
                 purchaserDto.getLastname(),
-                null,
-                null
+                companyMapper.mapToEntityList(purchaserDto.getCompanyDtos()),
+                orderMapper.mapToEntityList(purchaserDto.getOrderDtos())
         );
     }
 

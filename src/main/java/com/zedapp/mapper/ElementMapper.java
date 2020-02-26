@@ -1,7 +1,9 @@
 package com.zedapp.mapper;
 
 import com.zedapp.domain.Element;
+import com.zedapp.domain.File;
 import com.zedapp.domain.dto.ElementDto;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -10,13 +12,23 @@ import java.util.stream.Collectors;
 
 @Component
 public class ElementMapper {
+
+    @Autowired
+    private FileMapper fileMapper;
+
+    @Autowired
+    private OrderMapper orderMapper;
+
     public ElementDto mapToDto(Element element) {
         if (element == null)
             return null;
         return new ElementDto(
-            element.getName(),
+                element.getId(),
+                element.getName(),
                 element.getDestination(),
-                element.getStatus()
+                element.getStatus(),
+                fileMapper.mapToDtoList(element.getFiles()),
+                orderMapper.mapToDto(element.getOrder())
         );
     }
 
@@ -24,12 +36,12 @@ public class ElementMapper {
         if (elementDto == null)
             return null;
         return new Element(
-                0L,
+                elementDto.getId(),
                 elementDto.getName(),
                 elementDto.getDestination(),
                 elementDto.getStatus(),
-                null,
-                null
+                fileMapper.mapToEntityList(elementDto.getFileDtos()),
+                orderMapper.mapToEntity(elementDto.getOrderDto())
         );
     }
 
