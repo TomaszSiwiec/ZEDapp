@@ -2,6 +2,7 @@ package com.zedapp.mapper;
 
 import com.zedapp.domain.Company;
 import com.zedapp.domain.dto.CompanyDto;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -10,18 +11,24 @@ import java.util.stream.Collectors;
 
 @Component
 public class CompanyMapper {
+
+    @Autowired
+    private PurchaserMapper purchaserMapper;
+
     public CompanyDto mapToDto(Company company) {
         if (company == null)
             return null;
         return new CompanyDto(
-            company.getNip(),
-            company.getName(),
-            company.getStreet(),
-            company.getBuildingNumber(),
-            company.getLocalNumber(),
-            company.getZipCode(),
-            company.getCity(),
-            company.getCountry()
+                company.getId(),
+                company.getNip(),
+                company.getName(),
+                company.getStreet(),
+                company.getBuildingNumber(),
+                company.getLocalNumber(),
+                company.getZipCode(),
+                company.getCity(),
+                company.getCountry(),
+                purchaserMapper.mapToDtoList(company.getPurchasers())
         );
     }
 
@@ -29,7 +36,7 @@ public class CompanyMapper {
         if (companyDto == null)
             return null;
         return new Company(
-                0L,
+                companyDto.getId(),
                 companyDto.getNip(),
                 companyDto.getName(),
                 companyDto.getStreet(),
@@ -38,7 +45,7 @@ public class CompanyMapper {
                 companyDto.getZipCode(),
                 companyDto.getCity(),
                 companyDto.getCountry(),
-                null
+                purchaserMapper.mapToEntityList(companyDto.getPurchaserDtos())
         );
     }
 

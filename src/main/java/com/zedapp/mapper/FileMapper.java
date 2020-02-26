@@ -2,6 +2,7 @@ package com.zedapp.mapper;
 
 import com.zedapp.domain.File;
 import com.zedapp.domain.dto.FileDto;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -10,13 +11,19 @@ import java.util.stream.Collectors;
 
 @Component
 public class FileMapper {
+
+    @Autowired
+    private ElementMapper elementMapper;
+
     public FileDto mapToDto(File file) {
         if (file == null)
             return null;
         return new FileDto(
-            file.getFilename(),
+                file.getId(),
+                file.getFilename(),
                 file.getUuid(),
-                file.getDocumentType()
+                file.getDocumentType(),
+                elementMapper.mapToDtoList(file.getElements())
         );
     }
 
@@ -24,11 +31,11 @@ public class FileMapper {
         if (fileDto == null)
             return null;
         return new File(
-                0L,
+                fileDto.getId(),
                 fileDto.getFilename(),
                 fileDto.getUuid(),
                 fileDto.getDocumentType(),
-                null
+                elementMapper.mapToEntityList(fileDto.getElementDtos())
         );
     }
 

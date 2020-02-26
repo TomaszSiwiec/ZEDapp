@@ -2,6 +2,7 @@ package com.zedapp.mapper;
 
 import com.zedapp.domain.User;
 import com.zedapp.domain.dto.UserDto;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -10,17 +11,23 @@ import java.util.stream.Collectors;
 
 @Component
 public class UserMapper {
+
+    @Autowired
+    private OrderMapper orderMapper;
+
     public UserDto mapToDto(User user) {
         if (user == null)
             return null;
         return new UserDto(
+                user.getId(),
                 user.getUsername(),
                 user.getPassword(),
                 user.getMail(),
                 user.getName(),
                 user.getLastname(),
                 user.getDateOfBirth(),
-                user.getStatus()
+                user.getStatus(),
+                orderMapper.mapToDtoList(user.getOrders())
         );
     }
 
@@ -28,7 +35,7 @@ public class UserMapper {
         if (userDto == null)
             return null;
         return new User(
-                0L,
+                userDto.getId(),
                 userDto.getUsername(),
                 userDto.getPassword(),
                 userDto.getMail(),
@@ -36,7 +43,7 @@ public class UserMapper {
                 userDto.getLastname(),
                 userDto.getDateOfBirth(),
                 userDto.getStatus(),
-                null
+                orderMapper.mapToEntityList(userDto.getOrderDtos())
         );
     }
 
