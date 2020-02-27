@@ -23,5 +23,4 @@ public class UserDto implements Serializable {
     private String lastname;
     private LocalDate dateOfBirth;
     private UserStatus status;
-    private List<OrderDto> orderDtos;
 }

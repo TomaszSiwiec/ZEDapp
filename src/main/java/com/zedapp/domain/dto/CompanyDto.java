@@ -22,5 +22,4 @@ public class CompanyDto implements Serializable {
     private String zipCode;
     private String city;
     private String country;
-    private List<PurchaserDto> purchaserDtos;
 }

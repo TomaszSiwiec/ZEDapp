@@ -17,5 +17,4 @@ public class FileDto implements Serializable {
     private String filename;
     private String uuid;
     private String documentType;
-    private List<ElementDto> elementDtos;
 }

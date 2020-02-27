@@ -13,21 +13,13 @@ import java.util.stream.Collectors;
 @Component
 public class PurchaserMapper {
 
-    @Autowired
-    private CompanyMapper companyMapper;
-
-    @Autowired
-    private OrderMapper orderMapper;
-
     public PurchaserDto mapToDto(Purchaser purchaser) {
         if (purchaser == null)
             return null;
         return new PurchaserDto(
                 purchaser.getId(),
                 purchaser.getName(),
-                purchaser.getLastname(),
-                companyMapper.mapToDtoList(purchaser.getCompanies()),
-                orderMapper.mapToDtoList(purchaser.getOrders())
+                purchaser.getLastname()
         );
     }
 
@@ -38,8 +30,8 @@ public class PurchaserMapper {
                 purchaserDto.getId(),
                 purchaserDto.getName(),
                 purchaserDto.getLastname(),
-                companyMapper.mapToEntityList(purchaserDto.getCompanyDtos()),
-                orderMapper.mapToEntityList(purchaserDto.getOrderDtos())
+                null,
+                null
         );
     }
 

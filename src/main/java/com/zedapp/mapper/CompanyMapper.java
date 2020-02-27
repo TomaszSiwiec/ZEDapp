@@ -12,9 +12,6 @@ import java.util.stream.Collectors;
 @Component
 public class CompanyMapper {
 
-    @Autowired
-    private PurchaserMapper purchaserMapper;
-
     public CompanyDto mapToDto(Company company) {
         if (company == null)
             return null;
@@ -27,8 +24,7 @@ public class CompanyMapper {
                 company.getLocalNumber(),
                 company.getZipCode(),
                 company.getCity(),
-                company.getCountry(),
-                purchaserMapper.mapToDtoList(company.getPurchasers())
+                company.getCountry()
         );
     }
 
@@ -45,7 +41,7 @@ public class CompanyMapper {
                 companyDto.getZipCode(),
                 companyDto.getCity(),
                 companyDto.getCountry(),
-                purchaserMapper.mapToEntityList(companyDto.getPurchaserDtos())
+                null
         );
     }
 

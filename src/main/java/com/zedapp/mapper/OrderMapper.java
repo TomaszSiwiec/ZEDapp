@@ -12,15 +12,6 @@ import java.util.stream.Collectors;
 @Component
 public class OrderMapper {
 
-    @Autowired
-    private ElementMapper elementMapper;
-
-    @Autowired
-    private PurchaserMapper purchaserMapper;
-
-    @Autowired
-    private UserMapper userMapper;
-
     public OrderDto mapToDto(Order order) {
         if (order == null)
             return null;
@@ -28,10 +19,7 @@ public class OrderMapper {
                 order.getId(),
                 order.getName(),
                 order.getComments(),
-                order.getDateOfCreation(),
-                elementMapper.mapToDtoList(order.getElements()),
-                purchaserMapper.mapToDtoList(order.getPurchasers()),
-                userMapper.mapToDto(order.getAddedBy())
+                order.getDateOfCreation()
         );
     }
 
@@ -43,9 +31,9 @@ public class OrderMapper {
                 orderDto.getName(),
                 orderDto.getComments(),
                 orderDto.getDateOfCreation(),
-                elementMapper.mapToEntityList(orderDto.getElementDtos()),
-                purchaserMapper.mapToEntityList(orderDto.getPurchaserDtos()),
-                userMapper.mapToEntity(orderDto.getAddedByDto())
+                null,
+                null,
+                null
         );
     }
 

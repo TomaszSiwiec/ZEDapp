@@ -18,6 +18,4 @@ public class ElementDto implements Serializable {
     private String name;
     private String destination;
     private OrderStatus status;
-    private List<FileDto> fileDtos;
-    private OrderDto orderDto;
 }

@@ -12,9 +12,6 @@ import java.util.stream.Collectors;
 @Component
 public class UserMapper {
 
-    @Autowired
-    private OrderMapper orderMapper;
-
     public UserDto mapToDto(User user) {
         if (user == null)
             return null;
@@ -26,8 +23,7 @@ public class UserMapper {
                 user.getName(),
                 user.getLastname(),
                 user.getDateOfBirth(),
-                user.getStatus(),
-                orderMapper.mapToDtoList(user.getOrders())
+                user.getStatus()
         );
     }
 
@@ -43,7 +39,7 @@ public class UserMapper {
                 userDto.getLastname(),
                 userDto.getDateOfBirth(),
                 userDto.getStatus(),
-                orderMapper.mapToEntityList(userDto.getOrderDtos())
+                null
         );
     }
 
