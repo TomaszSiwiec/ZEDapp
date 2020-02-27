@@ -43,4 +43,15 @@ public class User implements Serializable {
             fetch = FetchType.LAZY
     )
     private List<Order> orders;
+
+    @PrePersist
+    public void prePersist() {
+        if (dateOfBirth == null) {
+            dateOfBirth = LocalDate.of(1900, 1, 1);
+        }
+
+        if (status == null) {
+            status = UserStatus.OFFLINE;
+        }
+    }
 }

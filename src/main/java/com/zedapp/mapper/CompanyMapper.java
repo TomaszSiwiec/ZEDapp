@@ -46,8 +46,6 @@ public class CompanyMapper {
     }
 
     public List<CompanyDto> mapToDtoList(List<Company> companyList) {
-        if (companyList.isEmpty())
-            return new ArrayList<>();
         if (companyList == null)
             return null;
 
@@ -57,8 +55,6 @@ public class CompanyMapper {
     }
 
     public List<Company> mapToEntityList(List<CompanyDto> companyDtoList) {
-        if (companyDtoList.isEmpty())
-            return new ArrayList<>();
         if (companyDtoList == null)
             return null;
 
