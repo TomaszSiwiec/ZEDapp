@@ -15,6 +15,4 @@ public class PurchaserDto {
     private long id;
     private String name;
     private String lastname;
-    private List<CompanyDto> companyDtos;
-    private List<OrderDto> orderDtos;
 }

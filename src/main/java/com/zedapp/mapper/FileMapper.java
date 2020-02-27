@@ -22,8 +22,7 @@ public class FileMapper {
                 file.getId(),
                 file.getFilename(),
                 file.getUuid(),
-                file.getDocumentType(),
-                elementMapper.mapToDtoList(file.getElements())
+                file.getDocumentType()
         );
     }
 
@@ -35,7 +34,7 @@ public class FileMapper {
                 fileDto.getFilename(),
                 fileDto.getUuid(),
                 fileDto.getDocumentType(),
-                elementMapper.mapToEntityList(fileDto.getElementDtos())
+                null
         );
     }
 

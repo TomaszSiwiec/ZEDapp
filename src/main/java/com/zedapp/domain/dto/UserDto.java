@@ -22,5 +22,4 @@ public class UserDto {
     private String lastname;
     private LocalDate dateOfBirth;
     private UserStatus status;
-    private List<OrderDto> orderDtos;
 }

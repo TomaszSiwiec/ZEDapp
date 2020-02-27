@@ -21,5 +21,4 @@ public class CompanyDto {
     private String zipCode;
     private String city;
     private String country;
-    private List<PurchaserDto> purchaserDtos;
 }

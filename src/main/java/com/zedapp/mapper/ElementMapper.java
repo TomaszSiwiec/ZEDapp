@@ -13,12 +13,6 @@ import java.util.stream.Collectors;
 @Component
 public class ElementMapper {
 
-    @Autowired
-    private FileMapper fileMapper;
-
-    @Autowired
-    private OrderMapper orderMapper;
-
     public ElementDto mapToDto(Element element) {
         if (element == null)
             return null;
@@ -26,9 +20,7 @@ public class ElementMapper {
                 element.getId(),
                 element.getName(),
                 element.getDestination(),
-                element.getStatus(),
-                fileMapper.mapToDtoList(element.getFiles()),
-                orderMapper.mapToDto(element.getOrder())
+                element.getStatus()
         );
     }
 
@@ -40,8 +32,8 @@ public class ElementMapper {
                 elementDto.getName(),
                 elementDto.getDestination(),
                 elementDto.getStatus(),
-                fileMapper.mapToEntityList(elementDto.getFileDtos()),
-                orderMapper.mapToEntity(elementDto.getOrderDto())
+                null,
+                null
         );
     }
 

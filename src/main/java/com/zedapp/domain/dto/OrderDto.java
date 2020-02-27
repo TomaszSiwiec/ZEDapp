@@ -17,7 +17,4 @@ public class OrderDto {
     private String name;
     private String comments;
     private LocalDateTime dateOfCreation;
-    private List<ElementDto> elementDtos;
-    private List<PurchaserDto> purchaserDtos;
-    private UserDto addedByDto;
 }
