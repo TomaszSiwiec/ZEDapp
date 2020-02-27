@@ -50,8 +50,6 @@ public class OrderMapper {
     }
 
     public List<OrderDto> mapToDtoList(List<Order> orderList) {
-        if (orderList.isEmpty())
-            return new ArrayList<>();
         if (orderList == null)
             return null;
 
@@ -61,8 +59,6 @@ public class OrderMapper {
     }
 
     public List<Order> mapToEntityList(List<OrderDto> orderDtoList) {
-        if (orderDtoList.isEmpty())
-            return new ArrayList<>();
         if (orderDtoList == null)
             return null;
 

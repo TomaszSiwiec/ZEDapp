@@ -44,8 +44,6 @@ public class PurchaserMapper {
     }
 
     public List<PurchaserDto> mapToDtoList(List<Purchaser> purchaserList) {
-        if (purchaserList.isEmpty())
-            return new ArrayList<>();
         if (purchaserList == null)
             return null;
 
@@ -55,8 +53,6 @@ public class PurchaserMapper {
     }
 
     public List<Purchaser> mapToEntityList(List<PurchaserDto> purchaserDtoList) {
-        if (purchaserDtoList.isEmpty())
-            return new ArrayList<>();
         if (purchaserDtoList == null)
             return null;
 

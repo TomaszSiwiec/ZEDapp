@@ -46,8 +46,6 @@ public class ElementMapper {
     }
 
     public List<ElementDto> mapToDtoList(List<Element> elementList) {
-        if (elementList.isEmpty())
-            return new ArrayList<>();
         if (elementList == null)
             return null;
 
@@ -57,8 +55,6 @@ public class ElementMapper {
     }
 
     public List<Element> mapToEntityList(List<ElementDto> elementDtoList) {
-        if (elementDtoList.isEmpty())
-            return new ArrayList<>();
         if (elementDtoList == null)
             return null;
 

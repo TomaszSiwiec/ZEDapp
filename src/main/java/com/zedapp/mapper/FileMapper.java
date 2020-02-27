@@ -40,8 +40,6 @@ public class FileMapper {
     }
 
     public List<FileDto> mapToDtoList(List<File> fileList) {
-        if (fileList.isEmpty())
-            return new ArrayList<>();
         if (fileList == null)
             return null;
 
@@ -51,8 +49,6 @@ public class FileMapper {
     }
 
     public List<File> mapToEntityList(List<FileDto> fileDtoList) {
-        if (fileDtoList.isEmpty())
-            return new ArrayList<>();
         if (fileDtoList == null)
             return null;
 

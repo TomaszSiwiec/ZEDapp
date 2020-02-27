@@ -48,8 +48,6 @@ public class UserMapper {
     }
 
     public List<UserDto> mapToDtoList(List<User> userList) {
-        if (userList.isEmpty())
-            return new ArrayList<>();
         if (userList == null)
             return null;
 
@@ -59,8 +57,6 @@ public class UserMapper {
     }
 
     public List<User> mapToEntityList(List<UserDto> userDtoList) {
-        if (userDtoList.isEmpty())
-            return new ArrayList<>();
         if (userDtoList == null)
             return null;
 
