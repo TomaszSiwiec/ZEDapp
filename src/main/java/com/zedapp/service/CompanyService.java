@@ -4,6 +4,7 @@ import com.zedapp.domain.Company;
 import com.zedapp.domain.dto.CompanyDto;
 import com.zedapp.mapper.CompanyMapper;
 import com.zedapp.repository.CompanyRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -12,6 +13,7 @@ import java.util.List;
 
 @Transactional
 @Service
+@Slf4j
 public class CompanyService {
     @Autowired
     private CompanyRepository companyRepository;
@@ -20,11 +22,13 @@ public class CompanyService {
     private CompanyMapper companyMapper;
 
     public List<CompanyDto> getAll() {
+        log.info("[ZEDAPP] Returned all object from entity COMPANIES");
         return companyMapper.mapToDtoList(companyRepository.findAll());
     }
 
     public CompanyDto get(long id) {
         Company company = companyRepository.findOrThrow(id);
+        log.info("[ZEDAPP] Returned object with ID: " + id + " from entity COMPANIES");
         return companyMapper.mapToDto(company);
     }
 
@@ -38,6 +42,7 @@ public class CompanyService {
         company.setZipCode(companyDto.getZipCode());
         company.setCity(companyDto.getCity());
         company.setCountry(companyDto.getCountry());
+        log.info("[ZEDAPP] Added new object with name: " + company.getName() + " to entity COMPANIES");
         return companyMapper.mapToDto(companyRepository.save(company));
     }
 
@@ -51,10 +56,12 @@ public class CompanyService {
         company.setZipCode(companyDto.getZipCode());
         company.setCity(companyDto.getCity());
         company.setCountry(companyDto.getCountry());
+        log.info("[ZEDAPP] Updated object with ID: " + id +  " from entity COMPANIES");
         return companyMapper.mapToDto(companyRepository.save(company));
     }
 
     public void delete(long id) {
         companyRepository.deleteById(id);
+        log.info("[ZEDAPP] Deleted object with ID: " + id + " from entity COMPANIES");
     }
 }

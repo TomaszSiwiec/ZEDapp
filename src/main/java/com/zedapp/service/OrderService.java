@@ -4,6 +4,7 @@ import com.zedapp.domain.Order;
 import com.zedapp.domain.dto.OrderDto;
 import com.zedapp.mapper.OrderMapper;
 import com.zedapp.repository.OrderRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,6 +15,7 @@ import java.util.List;
 
 @Transactional
 @Service
+@Slf4j
 public class OrderService {
 
     @Autowired
@@ -23,11 +25,13 @@ public class OrderService {
     private OrderMapper orderMapper;
 
     public List<OrderDto> getAll() {
+        log.info("[ZEDAPP] Returned all object from entity ORDERS");
         return orderMapper.mapToDtoList(orderRepository.findAll());
     }
 
     public OrderDto get(long id) {
         Order order = orderRepository.findOrThrow(id);
+        log.info("[ZEDAPP] Returned object with ID: " + id + " from entity ORDERS");
         return orderMapper.mapToDto(order);
     }
 
@@ -36,6 +40,7 @@ public class OrderService {
         order.setName(orderDto.getName());
         order.setComments(orderDto.getComments());
         order.setDateOfCreation(LocalDateTime.now());
+        log.info("[ZEDAPP] Added new object with name: " + order.getName() + " to entity ORDERS");
         return orderMapper.mapToDto(orderRepository.save(order));
     }
 
@@ -44,10 +49,12 @@ public class OrderService {
         order.setComments(orderDto.getComments());
         order.setName(orderDto.getName());
         order.setDateOfCreation(orderDto.getDateOfCreation());
+        log.info("[ZEDAPP] Updated object with ID: " + id +  " from entity ORDERS");
         return orderMapper.mapToDto(orderRepository.save(order));
     }
 
     public void delete(long id) {
         orderRepository.deleteById(id);
+        log.info("[ZEDAPP] Deleted object with ID: " + id + " from entity ORDERS");
     }
 }
