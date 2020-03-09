@@ -19,13 +19,33 @@ public class UserController {
         return userService.getAll();
     }
 
+    @GetMapping("/getAllOnline")
+    public List<UserDto> getAllOnline() {
+        return userService.getAllOnline();
+    }
+
+    @GetMapping("/getAllOffline")
+    public List<UserDto> getAllOffline() {
+        return userService.getAllOffline();
+    }
+
+    @GetMapping("/getByEmail")
+    public UserDto getByEmail(@RequestParam(value = "email") String email) {
+        return userService.getByEmail(email);
+    }
+
     @GetMapping("/get")
     public UserDto getById(@RequestParam(value = "id") Long id) {
         return userService.get(id);
     }
 
+    @GetMapping("/getByOrderId/{orderId}")
+    public UserDto getByOrderId(@PathVariable(name = "orderId") Long orderId) {
+        return userService.getByOrderId(orderId);
+    }
+
     @PostMapping("/create")
-    public UserDto create(@RequestBody UserDto userDto) {
+    public UserDto create(@RequestBody UserDto userDto) throws Exception {
         return userService.create(userDto);
     }
 

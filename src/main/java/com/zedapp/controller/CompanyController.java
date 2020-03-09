@@ -32,6 +32,11 @@ public class CompanyController {
         return companyService.get(id);
     }
 
+    @GetMapping("/getAllByPurchaserId")
+    public List<CompanyDto> getByPurchaserId(@RequestParam(value = "purchaserId") Long purchaserId) {
+        return companyService.getByPurchaserId(purchaserId);
+    }
+
     @PostMapping("/create")
     public CompanyDto create(@RequestBody CompanyDto companyDto) {
         return companyService.create(companyDto);

@@ -19,6 +19,16 @@ public class ElementController {
         return elementService.getAll();
     }
 
+    @GetMapping("/getAllByOrderId/{orderId}")
+    public List<ElementDto> getAllByOrderId(@PathVariable(name = "orderId") Long orderId) {
+        return elementService.getAllByOrderId(orderId);
+    }
+
+    @GetMapping("/getAllByFileId")
+    public List<ElementDto> getAllByFileId(@RequestParam(value = "fileId") Long fileId) {
+        return elementService.getAllByFileId(fileId);
+    }
+
     @GetMapping("/get")
     public ElementDto getById(@RequestParam(value = "id") Long id) {
         return elementService.get(id);
@@ -32,6 +42,11 @@ public class ElementController {
     @PutMapping("/update")
     public ElementDto update(@RequestParam(value = "id") Long id, @RequestBody ElementDto elementDto) {
         return elementService.update(id, elementDto);
+    }
+
+    @PutMapping("/assignFile")
+    public ElementDto assignFile(@RequestParam(value = "elementId") Long elementid, @RequestParam(value = "fileId") Long fileId) {
+        return elementService.assignFile(elementid, fileId);
     }
 
     @DeleteMapping("/delete")
