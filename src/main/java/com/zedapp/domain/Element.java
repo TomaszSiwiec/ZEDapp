@@ -27,12 +27,7 @@ public class Element implements Serializable {
     @Enumerated(EnumType.STRING)
     private OrderStatus status;
 
-    @ManyToMany(cascade = CascadeType.PERSIST)
-    @JoinTable(
-            name = "JOIN_ELEMENTS_FILES",
-            joinColumns = {@JoinColumn(name = "ELEMENTS_ID", referencedColumnName = "ID")},
-            inverseJoinColumns = {@JoinColumn(name = "FILES_ID",referencedColumnName = "ID")}
-    )
+    @ManyToMany(cascade = CascadeType.PERSIST, mappedBy = "files")
     private List<File> files;
 
     @ManyToOne
