@@ -19,6 +19,11 @@ public class FileController {
         return fileService.getAll();
     }
 
+    @GetMapping("/getAllByElementId")
+    public List<FileDto> getAll(@RequestParam(value = "elementId") Long elementId) {
+        return fileService.getAllByElementId(elementId);
+    }
+
     @GetMapping("/get")
     public FileDto getById(@RequestParam(value = "id") Long id) {
         return fileService.get(id);

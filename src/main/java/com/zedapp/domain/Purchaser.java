@@ -24,19 +24,9 @@ public class Purchaser implements Serializable {
 
     private String lastname;
 
-    @ManyToMany(cascade = CascadeType.PERSIST)
-    @JoinTable(
-            name = "JOIN_COMPANIES_PURCHASERS",
-            joinColumns = {@JoinColumn(name = "PURCHASERS_ID",referencedColumnName = "ID")},
-            inverseJoinColumns = {@JoinColumn(name = "COMPANIES_ID", referencedColumnName = "ID")}
-    )
+    @ManyToMany(cascade = CascadeType.PERSIST, mappedBy = "purchasers")
     private List<Company> companies;
 
-    @ManyToMany(cascade = CascadeType.PERSIST)
-    @JoinTable(
-            name = "JOIN_PURCHASERS_ORDERS",
-            joinColumns = {@JoinColumn(name = "PURCHASERS_ID", referencedColumnName = "ID")},
-            inverseJoinColumns = {@JoinColumn(name = "ORDERS_ID",referencedColumnName = "ID")}
-    )
+    @ManyToMany(cascade = CascadeType.PERSIST, mappedBy = "purchasers")
     private List<Order> orders;
 }

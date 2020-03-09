@@ -1,9 +1,11 @@
 package com.zedapp.service;
 
 import com.zedapp.domain.Company;
+import com.zedapp.domain.Purchaser;
 import com.zedapp.domain.dto.CompanyDto;
 import com.zedapp.mapper.CompanyMapper;
 import com.zedapp.repository.CompanyRepository;
+import com.zedapp.repository.PurchaserRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,6 +19,9 @@ import java.util.List;
 public class CompanyService {
     @Autowired
     private CompanyRepository companyRepository;
+
+    @Autowired
+    private PurchaserRepository purchaserRepository;
 
     @Autowired
     private CompanyMapper companyMapper;
@@ -63,5 +68,10 @@ public class CompanyService {
     public void delete(long id) {
         companyRepository.deleteById(id);
         log.info("[ZEDAPP] Deleted object with ID: " + id + " from entity COMPANIES");
+    }
+
+    public List<CompanyDto> getByPurchaserId(Long purchaserId) {
+        Purchaser purchaser = purchaserRepository.findOrThrow(purchaserId);
+        return companyMapper.mapToDtoList(purchaser.getCompanies());
     }
 }

@@ -1,8 +1,10 @@
 package com.zedapp.service;
 
+import com.zedapp.domain.Element;
 import com.zedapp.domain.File;
 import com.zedapp.domain.dto.FileDto;
 import com.zedapp.mapper.FileMapper;
+import com.zedapp.repository.ElementRepository;
 import com.zedapp.repository.FileRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +20,9 @@ import java.util.List;
 public class FileService {
     @Autowired
     private FileRepository fileRepository;
+
+    @Autowired
+    private ElementRepository elementRepository;
 
     @Autowired
     private FileMapper fileMapper;
@@ -54,5 +59,10 @@ public class FileService {
     public void delete(long id) {
         fileRepository.deleteById(id);
         log.info("[ZEDAPP] Deleted object with ID: " + id + " from entity FILES");
+    }
+
+    public List<FileDto> getAllByElementId(Long elementId) {
+        Element element = elementRepository.findOrThrow(elementId);
+        return fileMapper.mapToDtoList(element.getFiles());
     }
 }
