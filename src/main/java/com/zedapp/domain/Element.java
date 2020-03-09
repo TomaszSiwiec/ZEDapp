@@ -27,7 +27,7 @@ public class Element implements Serializable {
     @Enumerated(EnumType.STRING)
     private OrderStatus status;
 
-    @ManyToMany(cascade = CascadeType.PERSIST, mappedBy = "files")
+    @ManyToMany(cascade = CascadeType.PERSIST, mappedBy = "elements")
     private List<File> files;
 
     @ManyToOne
