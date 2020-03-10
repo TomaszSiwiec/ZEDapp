@@ -72,6 +72,7 @@ public class CompanyService {
 
     public List<CompanyDto> getByPurchaserId(Long purchaserId) {
         Purchaser purchaser = purchaserRepository.findOrThrow(purchaserId);
+        log.info("[ZEDAPP] Returned all objects with Purchaser ID: " + purchaserId + " from entity COMPANIES");
         return companyMapper.mapToDtoList(purchaser.getCompanies());
     }
 }

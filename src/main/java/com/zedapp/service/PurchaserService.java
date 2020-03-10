@@ -26,9 +26,6 @@ public class PurchaserService {
 
     @Autowired
     private CompanyRepository companyRepository;
-
-    @Autowired
-    private OrderRepository orderRepository;
     
     @Autowired
     private PurchaserMapper purchaserMapper;
@@ -76,6 +73,7 @@ public class PurchaserService {
         companysPurchasers.add(purchaser);
         company.setPurchasers(companysPurchasers);
         companyRepository.save(company);
+        log.info("[ZEDAPP] Assigned purchaser with id: " + purchaserId + " to company with id: " + companyId);
         return purchaserMapper.mapToDto(purchaserRepository.save(purchaser));
     }
 
@@ -85,6 +83,7 @@ public class PurchaserService {
         List<Purchaser> filteredPurchasers = purchasers.stream()
                 .filter(purchaser -> purchaser.getCompanies().contains(company))
                 .collect(Collectors.toList());
+        log.info("[ZEDAPP] Returned list of Purchaser objects with company's id: " + companyId);
         return purchaserMapper.mapToDtoList(filteredPurchasers);
     }
 }

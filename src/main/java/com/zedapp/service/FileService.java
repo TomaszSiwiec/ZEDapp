@@ -11,7 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Transactional
@@ -63,6 +62,7 @@ public class FileService {
 
     public List<FileDto> getAllByElementId(Long elementId) {
         Element element = elementRepository.findOrThrow(elementId);
+        log.info("[ZEDAPP] Returned all File objects with Element ID: " + elementId);
         return fileMapper.mapToDtoList(element.getFiles());
     }
 }

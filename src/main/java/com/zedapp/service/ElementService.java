@@ -85,7 +85,7 @@ public class ElementService {
                 filteredElements.add(element);
             }
         }
-
+        log.info("[ZEDAPP] Returned all objects with File ID: " + fileId + " from entity ELEMENTS");
         return elementMapper.mapToDtoList(filteredElements);
     }
 
@@ -103,6 +103,7 @@ public class ElementService {
         file.setElements(elements);
 
         fileRepository.save(file);
+        log.info("[ZEDAPP] Assigned File object with ID: " + fileId + " to Element object with ID: " + elementid);
         return elementMapper.mapToDto(elementRepository.save(element));
     }
 }
