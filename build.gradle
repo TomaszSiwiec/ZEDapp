@@ -32,7 +32,10 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web:2.2.4.RELEASE'
 //    implementation 'org.springframework.boot:spring-boot-starter-web-services:2.2.4.RELEASE'
     implementation 'org.slf4j:slf4j-api:1.7.30'
-    
+    implementation 'io.springfox:springfox-swagger2:2.9.2'
+    implementation 'io.springfox:springfox-swagger-ui:2.9.2'
+
+
     compileOnly 'org.projectlombok:lombok:1.18.10'
     
     developmentOnly 'org.springframework.boot:spring-boot-devtools:2.2.4.RELEASE'
