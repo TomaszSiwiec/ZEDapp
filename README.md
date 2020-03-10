@@ -18,7 +18,7 @@ Technologies:
 ## Demo
 
 You can see demo version here: [Demo](https://zedapp.herokuapp.com/). 
-This project does not contain frontend part, so you can test API by Postman.
+This project does not contain frontend part, so you can test API by Postman. All endpoints are in documentation in Endpoints section.
 
 
 ## Requirements
@@ -78,7 +78,8 @@ gradlew bootRun
 
 ## Endpoints
 
-Coming soon...
+You can find Swagger API documentation here:
+[http://zedapp.herokuapp.com/swagger-ui.html](http://zedapp.herokuapp.com/swagger-ui.html)
 
 
 ## Development
