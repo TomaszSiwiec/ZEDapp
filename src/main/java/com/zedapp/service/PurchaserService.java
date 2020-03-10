@@ -8,6 +8,7 @@ import com.zedapp.mapper.PurchaserMapper;
 import com.zedapp.repository.CompanyRepository;
 import com.zedapp.repository.OrderRepository;
 import com.zedapp.repository.PurchaserRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,6 +18,7 @@ import java.util.stream.Collectors;
 
 @Transactional
 @Service
+@Slf4j
 public class PurchaserService {
     
     @Autowired
@@ -24,19 +26,18 @@ public class PurchaserService {
 
     @Autowired
     private CompanyRepository companyRepository;
-
-    @Autowired
-    private OrderRepository orderRepository;
     
     @Autowired
     private PurchaserMapper purchaserMapper;
 
     public List<PurchaserDto> getAll() {
+        log.info("[ZEDAPP] Returned all object from entity PURCHASERS");
         return purchaserMapper.mapToDtoList(purchaserRepository.findAll());
     }
 
     public PurchaserDto get(long id) {
         Purchaser purchaser = purchaserRepository.findOrThrow(id);
+        log.info("[ZEDAPP] Returned object with ID: " + id + " from entity PURCHASERS");
         return purchaserMapper.mapToDto(purchaser);
     }
 
@@ -44,6 +45,7 @@ public class PurchaserService {
         Purchaser purchaser = new Purchaser();
         purchaser.setName(purchaserDto.getName());
         purchaser.setLastname(purchaserDto.getLastname());
+        log.info("[ZEDAPP] Added new object with name: " + purchaser.getName() + " " + purchaser.getLastname() + " to entity PURCHASERS");
         return purchaserMapper.mapToDto(purchaserRepository.save(purchaser));
     }
 
@@ -51,11 +53,13 @@ public class PurchaserService {
         Purchaser purchaser = purchaserRepository.findOrThrow(id);
         purchaser.setName(purchaserDto.getName());
         purchaser.setLastname(purchaserDto.getLastname());
+        log.info("[ZEDAPP] Updated object with ID: " + id +  " from entity PURCHASERS");
         return purchaserMapper.mapToDto(purchaserRepository.save(purchaser));
     }
 
     public void delete(long id) {
         purchaserRepository.deleteById(id);
+        log.info("[ZEDAPP] Deleted object with ID: " + id + " from entity PURCHASERS");
     }
 
     public PurchaserDto assignCompany(Long purchaserId, Long companyId) {
@@ -69,6 +73,7 @@ public class PurchaserService {
         companysPurchasers.add(purchaser);
         company.setPurchasers(companysPurchasers);
         companyRepository.save(company);
+        log.info("[ZEDAPP] Assigned purchaser with id: " + purchaserId + " to company with id: " + companyId);
         return purchaserMapper.mapToDto(purchaserRepository.save(purchaser));
     }
 
@@ -78,6 +83,7 @@ public class PurchaserService {
         List<Purchaser> filteredPurchasers = purchasers.stream()
                 .filter(purchaser -> purchaser.getCompanies().contains(company))
                 .collect(Collectors.toList());
+        log.info("[ZEDAPP] Returned list of Purchaser objects with company's id: " + companyId);
         return purchaserMapper.mapToDtoList(filteredPurchasers);
     }
 }

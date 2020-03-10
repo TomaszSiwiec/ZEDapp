@@ -5,16 +5,15 @@ import com.zedapp.domain.Order;
 import com.zedapp.domain.Purchaser;
 import com.zedapp.domain.User;
 import com.zedapp.domain.dto.OrderDto;
-import com.zedapp.mapper.ElementMapper;
 import com.zedapp.mapper.OrderMapper;
 import com.zedapp.repository.ElementRepository;
 import com.zedapp.repository.OrderRepository;
 import com.zedapp.repository.PurchaserRepository;
 import com.zedapp.repository.UserRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.persistence.EntityNotFoundException;
 import javax.transaction.Transactional;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -22,6 +21,7 @@ import java.util.stream.Collectors;
 
 @Transactional
 @Service
+@Slf4j
 public class OrderService {
 
     @Autowired
@@ -40,11 +40,13 @@ public class OrderService {
     private OrderMapper orderMapper;
 
     public List<OrderDto> getAll() {
+        log.info("[ZEDAPP] Returned all object from entity ORDERS");
         return orderMapper.mapToDtoList(orderRepository.findAll());
     }
 
     public OrderDto get(long id) {
         Order order = orderRepository.findOrThrow(id);
+        log.info("[ZEDAPP] Returned object with ID: " + id + " from entity ORDERS");
         return orderMapper.mapToDto(order);
     }
 
@@ -53,6 +55,7 @@ public class OrderService {
         order.setName(orderDto.getName());
         order.setComments(orderDto.getComments());
         order.setDateOfCreation(LocalDateTime.now());
+        log.info("[ZEDAPP] Added new object with name: " + order.getName() + " to entity ORDERS");
         return orderMapper.mapToDto(orderRepository.save(order));
     }
 
@@ -61,6 +64,7 @@ public class OrderService {
         order.setComments(orderDto.getComments());
         order.setName(orderDto.getName());
         order.setDateOfCreation(orderDto.getDateOfCreation());
+        log.info("[ZEDAPP] Updated object with ID: " + id +  " from entity ORDERS");
         return orderMapper.mapToDto(orderRepository.save(order));
     }
 
@@ -77,6 +81,7 @@ public class OrderService {
 
     public void delete(long id) {
         orderRepository.deleteById(id);
+        log.info("[ZEDAPP] Deleted object with ID: " + id + " from entity ORDERS");
     }
 
     public void deleteElementFromOrder(Long orderId, Long elementId) {
@@ -87,6 +92,7 @@ public class OrderService {
         order.setElements(elements);
         orderRepository.save(order);
         elementRepository.delete(element);
+        log.info("[ZEDAPP] Deleted Element object with ID: " + elementId + " from Order object with ID: " + orderId);
     }
 
     public OrderDto assignUser(Long orderId, Long userId) {
@@ -97,6 +103,7 @@ public class OrderService {
         order.setAddedBy(user);
         user.setOrders(orders);
         userRepository.save(user);
+        log.info("[ZEDAPP] Assigned User object with ID: " + userId + " to Order object with ID: " + orderId);
         return orderMapper.mapToDto(orderRepository.save(order));
     }
 
@@ -110,6 +117,7 @@ public class OrderService {
         purchasersOrders.add(order);
         purchaser.setOrders(purchasersOrders);
         purchaserRepository.save(purchaser);
+        log.info("[ZEDAPP] Assigned Purchaser object with ID: " + purchaserId + " to Order object with ID: " + orderId);
         return orderMapper.mapToDto(orderRepository.save(order));
     }
 
@@ -119,6 +127,7 @@ public class OrderService {
         List<Order> filteredOrders = orders.stream()
                 .filter(order -> order.getPurchasers().contains(purchaser))
                 .collect(Collectors.toList());
+        log.info("[ZEDAPP] Returned all objects with purchaser's ID: " + purchaserId + " from entity ORDERS");
         return orderMapper.mapToDtoList(filteredOrders);
     }
 }
