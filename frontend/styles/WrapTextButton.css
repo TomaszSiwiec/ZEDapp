@@ -1,0 +1,7 @@
+:host {
+    height: auto;
+}
+
+[part="label"] {
+    white-space: normal;
+}
