@@ -27,6 +27,12 @@
     /*left: auto;*/
 }
 
+.headerLogo {
+    /*margin-left: -2.4%;*/
+    /*margin-top: -1.9%;*/
+    -webkit-filter: invert(100%);
+}
+
 .headerIconButton {
     /*float: right;*/
     background-color: transparent;

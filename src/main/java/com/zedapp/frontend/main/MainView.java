@@ -5,6 +5,7 @@ import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.datepicker.DatePicker;
 import com.vaadin.flow.component.dependency.CssImport;
+import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.grid.HeaderRow;
 import com.vaadin.flow.component.html.Image;
@@ -14,6 +15,8 @@ import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
+import com.vaadin.flow.component.upload.Upload;
+import com.vaadin.flow.component.upload.receivers.MultiFileMemoryBuffer;
 import com.vaadin.flow.data.provider.ListDataProvider;
 import com.vaadin.flow.data.value.ValueChangeMode;
 import com.vaadin.flow.router.Route;
@@ -61,7 +64,7 @@ public class MainView extends VerticalLayout {
         mainLayout = getMainLayout();
 
         mainMenuLayout.add(menuLayout, mainLayout);
-        allLayout.add(getHeaderLayout(), mainMenuLayout, getButtonsAddAndEdit());
+        allLayout.add(getHeaderLayout(), mainMenuLayout);
         allLayout.setSizeFull();
         setSizeFull();
         setPadding(false);
@@ -89,18 +92,21 @@ public class MainView extends VerticalLayout {
         HorizontalLayout horizontalLayout = new HorizontalLayout();
         horizontalLayout.addClassName("headerLayout");
 
+//        Image image = new Image("http://zed-lift.pl/wp-content/themes/zed/demos/barber/images/zed-logo3.png", "DummyImage");
+        Image image = new Image("zedapp-logo.png", "DummyImage");
+        image.setHeight("90px");
+        image.addClassName("headerLogo");
+        horizontalLayout.add(image);
+
         VerticalLayout verticalLayout = new VerticalLayout();
         horizontalLayout.addClassName("insideHeaderLayout");
-
-        Image image = new Image();
-        image.addClassName("profileImageInHeader");
 
         Label label = new Label("Tomasz Siwiec");
         label.addClassName("headerNameLabel");
         Icon icon = new Icon(VaadinIcon.COG_O);
         HorizontalLayout buttonContent = new HorizontalLayout();
         buttonContent.addClassName("buttonContent");
-        buttonContent.add(image, label, icon);
+        buttonContent.add(label, icon);
         Button button = new Button(buttonContent);
         button.addClassName("headerIconButton");
 
@@ -128,8 +134,17 @@ public class MainView extends VerticalLayout {
 
         Button button = new Button("Zamówienia wewnętrzne");
         button.addClickListener( event -> {
-            VerticalLayout vertical = getMenuLayout();
-            mainMenuLayout.replace(mainMenuLayout.getComponentAt(1), vertical);
+            VerticalLayout vertical = null;
+            try {
+                vertical = getMainLayout();
+            } catch (URISyntaxException e) {
+                e.printStackTrace();
+            } catch (JsonProcessingException e) {
+                e.printStackTrace();
+            } catch (UnknownHostException e) {
+                e.printStackTrace();
+            }
+            mainMenuLayout.replace(mainLayout, vertical);
             mainLayout = vertical;
         } );
 
@@ -251,7 +266,7 @@ public class MainView extends VerticalLayout {
 
         //Button for new order
 
-        Button newOrderButton = new Button("Nowe");
+        Button newOrderButton = new Button("Nowe", event -> allLayout.add(getLayoutWithNewOrderDialog()));
         newOrderButton.addClassName("getButtonsAdd");
         newOrderButton.setSizeFull();
         grid.getColumnByKey("deleteButtonColumn")
@@ -265,6 +280,35 @@ public class MainView extends VerticalLayout {
 //                .setComponent(newOrderButton);
 
         return grid;
+    }
+
+    private VerticalLayout getLayoutWithNewOrderDialog() {
+        VerticalLayout verticalLayout = new VerticalLayout();
+        Dialog dialog = new Dialog();
+
+        VerticalLayout column1 = new VerticalLayout();
+        TextField name = new TextField("Nazwa");
+        TextField comments = new TextField("Komentarz");
+        column1.add(name, comments);
+
+        VerticalLayout column2 = new VerticalLayout();
+        DatePicker enterDate = new DatePicker("Data wprowadzenia");
+        DatePicker deadlineDate = new DatePicker("Termin");
+
+        MultiFileMemoryBuffer buffer = new MultiFileMemoryBuffer();
+        Upload upload = new Upload(buffer);
+        upload.setAutoUpload(false);
+
+        upload.addSucceededListener(event -> {
+            System.out.println("DODANO PLIKI!");
+        });
+
+        column2.add(enterDate, deadlineDate, upload);
+
+        HorizontalLayout columns = new HorizontalLayout(column1, column2);
+        dialog.add(columns);
+        verticalLayout.add(dialog);
+        return verticalLayout;
     }
 
     private void createOrder() {
