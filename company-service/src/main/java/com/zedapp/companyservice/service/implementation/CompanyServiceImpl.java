@@ -2,6 +2,9 @@ package com.zedapp.companyservice.service.implementation;
 
 import com.zedapp.companyservice.domain.Company;
 import com.zedapp.companyservice.dto.CompanyDto;
+import com.zedapp.companyservice.dto.PurchaserDto;
+import com.zedapp.companyservice.exception.ObjectNotFoundException;
+import com.zedapp.companyservice.exception.ServiceConnectionProblemException;
 import com.zedapp.companyservice.mapper.CompanyMapper;
 import com.zedapp.companyservice.repository.CompanyRepository;
 import com.zedapp.companyservice.service.CompanyService;
@@ -10,11 +13,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
+@Transactional
 public class CompanyServiceImpl implements CompanyService {
 
     @Autowired
@@ -22,6 +28,9 @@ public class CompanyServiceImpl implements CompanyService {
 
     @Autowired
     private CompanyMapper companyMapper;
+
+    @Autowired
+    private PurchaserServiceImpl purchaserService;
 
     @Override
     public ResponseEntity create(CompanyDto companyDto) {
@@ -31,10 +40,33 @@ public class CompanyServiceImpl implements CompanyService {
             return ResponseEntity.status(HttpStatus.CONFLICT).body(errorMessage);
         }
 
-        Company company = companyMapper.mapToCompany(companyDto);
-        company.setOrderId(getNextAvailableOrderId());
-        companyRepository.save(company);
-        return new ResponseEntity(company, HttpStatus.OK);
+        try {
+            List<String> purchaserIds = companyDto.getPurchaserDtos().stream()
+                    .map(purchaserDto -> purchaserDto.getId())
+                    .collect(Collectors.toList());
+
+            List<String> purchasersWhoExist = findIfExists(purchaserIds);
+            List<String> purchasersWhoDoNotExist = new ArrayList<>(purchaserIds);
+
+            for (String id : purchasersWhoExist) {
+                purchasersWhoDoNotExist.remove(id);
+            }
+
+            Company company = companyMapper.mapToCompany(companyDto);
+            company.setOrderId(getNextAvailableOrderId());
+            company.setPurchasersIds(purchasersWhoExist);
+            companyRepository.save(company);
+
+            if (!purchasersWhoDoNotExist.isEmpty()) {
+                String errorMessage = "[ZEDAPP] Company " + companyDto.getName() + " was created, but " +
+                        " without purchasers with ids: " + purchasersWhoDoNotExist;
+                return ResponseEntity.status(HttpStatus.ACCEPTED).body(errorMessage);
+            }
+
+            return new ResponseEntity(company, HttpStatus.OK);
+        } catch (ServiceConnectionProblemException ex) {
+            return ResponseEntity.status(HttpStatus.METHOD_NOT_ALLOWED).body(ex.getMessage());
+        }
     }
 
     private boolean findDuplicationCompanyWithNip(String nip) {
@@ -46,18 +78,59 @@ public class CompanyServiceImpl implements CompanyService {
         return false;
     }
 
+    private List<String> findIfExists(List<String> purchaserIds) throws ServiceConnectionProblemException {
+        List<String> existIds = new ArrayList<>();
+        for (String id : purchaserIds) {
+            if (purchaserService.getById(id) != null) {
+                existIds.add(id);
+            }
+        }
+        return existIds;
+    }
+
     @Override
-    public ResponseEntity update(CompanyDto companyDto) {
-        return new ResponseEntity(HttpStatus.OK);
+    public ResponseEntity update(String id, CompanyDto companyDto) {
+        try {
+            Company company = companyRepository.findOrThrow(id);
+            company.setName(companyDto.getName());
+            company.setStreet(companyDto.getStreet());
+            company.setBuildingNumber(companyDto.getBuildingNumber());
+            company.setLocalNumber(companyDto.getLocalNumber());
+            company.setZipCode(companyDto.getZipCode());
+            company.setCity(companyDto.getCity());
+            company.setCountry(companyDto.getCountry());
+            company.setNip(companyDto.getNip());
+
+            List<String> purchaserIds = new ArrayList<>();
+            for (PurchaserDto purchaserDto : companyDto.getPurchaserDtos()) {
+                purchaserIds.add(purchaserDto.getId());
+            }
+            company.setPurchasersIds(purchaserIds);
+            companyRepository.save(company);
+            return new ResponseEntity<>(company, HttpStatus.OK);
+        } catch (ObjectNotFoundException e) {
+            String errorMessage = "[ZEDAPP] Object with id = " + id + " not found!";
+            log.error(errorMessage);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorMessage);
+        }
     }
 
     @Override
     public ResponseEntity delete(String id) {
-        return new ResponseEntity(HttpStatus.OK);
+        try {
+            Company company = companyRepository.findOrThrow(id);
+            companyRepository.delete(company);
+            return new ResponseEntity(HttpStatus.OK);
+        } catch (ObjectNotFoundException e) {
+            String errorMessage = "[ZEDAPP] Object with id = " + id + " not found!";
+            log.error(errorMessage);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorMessage);
+        }
     }
 
     @Override
     public ResponseEntity deleteAll() {
+        companyRepository.deleteAll();
         return new ResponseEntity(HttpStatus.OK);
     }
 

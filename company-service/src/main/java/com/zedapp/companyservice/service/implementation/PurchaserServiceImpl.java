@@ -1,6 +1,7 @@
 package com.zedapp.companyservice.service.implementation;
 
 import com.zedapp.companyservice.dto.PurchaserDto;
+import com.zedapp.companyservice.exception.ServiceConnectionProblemException;
 import com.zedapp.companyservice.service.PurchaserService;
 import org.springframework.stereotype.Service;
 
@@ -10,8 +11,8 @@ import java.util.List;
 @Service
 public class PurchaserServiceImpl implements PurchaserService {
     @Override
-    public PurchaserDto getById(String id) {
-        return null;
+    public PurchaserDto getById(String id) throws ServiceConnectionProblemException {
+        throw new ServiceConnectionProblemException("[ZEDAPP] Problem with connection to PurchaserService");
     }
 
     @Override

@@ -9,7 +9,7 @@ public interface CompanyService {
 
     ResponseEntity create(CompanyDto companyDto);
 
-    ResponseEntity update(CompanyDto companyDto);
+    ResponseEntity update(String id, CompanyDto companyDto);
 
     ResponseEntity delete(String id);
 

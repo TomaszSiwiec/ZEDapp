@@ -29,8 +29,13 @@ public class CompanyController {
         return companyService.getById(id);
     }
 
-    @PostMapping
+    @PostMapping(value = "/create")
     public ResponseEntity<CompanyDto> create(@RequestBody CompanyDto companyDto) {
         return companyService.create(companyDto);
+    }
+
+    @PutMapping(value = "/update/{companyId}")
+    public ResponseEntity<CompanyDto> update(@PathVariable("companyId") String id, CompanyDto companyDto) {
+        return companyService.update(id, companyDto);
     }
 }
