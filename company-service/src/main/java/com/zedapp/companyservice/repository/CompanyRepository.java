@@ -19,4 +19,7 @@ public interface CompanyRepository extends MongoRepository<Company, String> {
     List<Company> findCompaniesByZipCode(String zipCode);
     List<Company> findCompaniesByCity(String city);
     List<Company> findAllByOrderIdExists();
+    default boolean checkCompanyExists(String id) {
+        return findById(id) == null ? true : false;
+    }
 }
