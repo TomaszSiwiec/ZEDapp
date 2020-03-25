@@ -1,5 +1,6 @@
 package com.zedapp.companyservice.service.implementation;
 
+import com.zedapp.companyservice.config.URIConfig;
 import com.zedapp.companyservice.domain.Company;
 import com.zedapp.companyservice.dto.CompanyDto;
 import com.zedapp.companyservice.dto.PurchaserDto;
@@ -14,7 +15,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.client.RestTemplate;
+import org.springframework.web.util.UriComponentsBuilder;
 
+import java.net.URI;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -34,6 +38,13 @@ public class CompanyServiceImpl implements CompanyService {
 
     @Override
     public ResponseEntity create(CompanyDto companyDto) {
+        if (!checkPurchaserServiceAvailable()) {
+            String errorMessage = "[ZEDAPP] You are not able to create Company with name = " + companyDto.getName() +
+                    " due to Purchaser Service connection problem";
+            log.error(errorMessage);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorMessage);
+        }
+
         if (findDuplicationCompanyWithNip(companyDto.getNip())) {
             String errorMessage = "[ZEDAPP] Company with NIP = " + companyDto.getNip() + " already exists!";
             log.error(errorMessage);
@@ -45,23 +56,12 @@ public class CompanyServiceImpl implements CompanyService {
                     .map(purchaserDto -> purchaserDto.getId())
                     .collect(Collectors.toList());
 
-            List<String> purchasersWhoExist = findIfExists(purchaserIds);
-            List<String> purchasersWhoDoNotExist = new ArrayList<>(purchaserIds);
-
-            for (String id : purchasersWhoExist) {
-                purchasersWhoDoNotExist.remove(id);
-            }
+            purchaserService.createIfNotExist(companyDto.getPurchaserDtos());
 
             Company company = companyMapper.mapToCompany(companyDto);
             company.setOrderId(getNextAvailableOrderId());
-            company.setPurchasersIds(purchasersWhoExist);
+            company.setPurchasersIds(purchaserIds);
             companyRepository.save(company);
-
-            if (!purchasersWhoDoNotExist.isEmpty()) {
-                String errorMessage = "[ZEDAPP] Company " + companyDto.getName() + " was created, but " +
-                        " without purchasers with ids: " + purchasersWhoDoNotExist;
-                return ResponseEntity.status(HttpStatus.ACCEPTED).body(errorMessage);
-            }
 
             return new ResponseEntity(company, HttpStatus.OK);
         } catch (ServiceConnectionProblemException ex) {
@@ -78,18 +78,15 @@ public class CompanyServiceImpl implements CompanyService {
         return false;
     }
 
-    private List<String> findIfExists(List<String> purchaserIds) throws ServiceConnectionProblemException {
-        List<String> existIds = new ArrayList<>();
-        for (String id : purchaserIds) {
-            if (purchaserService.getById(id) != null) {
-                existIds.add(id);
-            }
-        }
-        return existIds;
-    }
-
     @Override
     public ResponseEntity update(String id, CompanyDto companyDto) {
+        if (!checkPurchaserServiceAvailable()) {
+            String errorMessage = "[ZEDAPP] You are not able to edit Company with id = " + id +
+                    " due to Purchaser Service connection problem";
+            log.error(errorMessage);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorMessage);
+        }
+
         try {
             Company company = companyRepository.findOrThrow(id);
             company.setName(companyDto.getName());
@@ -174,6 +171,19 @@ public class CompanyServiceImpl implements CompanyService {
     @Override
     public List<CompanyDto> findByCity(String city) {
         return null;
+    }
+
+    public boolean checkPurchaserServiceAvailable() {
+
+        RestTemplate restTemplate = new RestTemplate();
+
+        URI uri = UriComponentsBuilder.fromHttpUrl(URIConfig.PURCHASER_SERVICE_URL + "/checkStatus")
+                .build().encode().toUri();
+        ResponseEntity<String> response = restTemplate.getForObject(uri, ResponseEntity.class);
+        if (response.getStatusCode().equals(HttpStatus.OK) && response.getBody().equals("ALIVE")) {
+            return true;
+        }
+        return false;
     }
 
     private Long getNextAvailableOrderId() {
