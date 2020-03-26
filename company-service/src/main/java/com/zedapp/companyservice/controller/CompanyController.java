@@ -17,6 +17,29 @@ public class CompanyController {
     @Autowired
     private CompanyServiceImpl companyService;
 
+    @PostMapping(value = "/create",
+            produces = MediaType.APPLICATION_JSON_VALUE,
+            consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<CompanyDto> create(@RequestBody CompanyDto companyDto) {
+        return companyService.create(companyDto);
+    }
+
+    @PutMapping(value = "/update/{companyId}",
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<CompanyDto> update(@PathVariable("companyId") String id, CompanyDto companyDto) {
+        return companyService.update(id, companyDto);
+    }
+
+    @DeleteMapping(value = "/delete/{companyId}")
+    public ResponseEntity deleteById(@PathVariable("companyId") String id) {
+        return companyService.delete(id);
+    }
+
+    @DeleteMapping(value = "/deleteAll")
+    public ResponseEntity deleteAll() {
+        return companyService.deleteAll();
+    }
+
     @GetMapping(value = "/getAll",
             produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<CompanyDto>> getAll() {
@@ -29,13 +52,27 @@ public class CompanyController {
         return companyService.getById(id);
     }
 
-    @PostMapping(value = "/create")
-    public ResponseEntity<CompanyDto> create(@RequestBody CompanyDto companyDto) {
-        return companyService.create(companyDto);
+    @GetMapping(value = "/getByNip/{nip}",
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<CompanyDto> getByNip(@PathVariable("nip") String nip) {
+        return companyService.getByNip(nip);
     }
 
-    @PutMapping(value = "/update/{companyId}")
-    public ResponseEntity<CompanyDto> update(@PathVariable("companyId") String id, CompanyDto companyDto) {
-        return companyService.update(id, companyDto);
+    @GetMapping(value = "/getByName/{name}",
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<List<CompanyDto>> getByName(@PathVariable("name") String name) {
+        return companyService.getByName(name);
+    }
+
+    @GetMapping(value = "/getByZipCode/{zipCode}",
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<List<CompanyDto>> getByZipCode(@PathVariable("zipCode") String zipCode) {
+        return companyService.getByZipCode(zipCode);
+    }
+
+    @GetMapping(value = "/getByCity/{cityName}",
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<List<CompanyDto>> getByCityName(@PathVariable("cityName") String cityName) {
+        return companyService.getByCity(cityName);
     }
 }

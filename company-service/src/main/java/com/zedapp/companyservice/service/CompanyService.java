@@ -19,14 +19,12 @@ public interface CompanyService {
 
     ResponseEntity<CompanyDto> getById(String id);
 
-    CompanyDto findByNip(String nip);
+    ResponseEntity<CompanyDto> getByNip(String nip);
 
-    List<CompanyDto> findByName(String name);
+    ResponseEntity<List<CompanyDto>> getByName(String name);
 
-    List<CompanyDto> findByStreet(String street);
+    ResponseEntity<List<CompanyDto>> getByZipCode(String zipCode);
 
-    List<CompanyDto> findByZipCode(String zipCode);
-
-    List<CompanyDto> findByCity(String city);
+    ResponseEntity<List<CompanyDto>> getByCity(String city);
 
 }
