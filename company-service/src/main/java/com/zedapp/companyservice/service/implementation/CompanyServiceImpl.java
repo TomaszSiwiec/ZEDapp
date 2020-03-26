@@ -52,11 +52,14 @@ public class CompanyServiceImpl implements CompanyService {
         }
 
         try {
-            List<String> purchaserIds = companyDto.getPurchaserDtos().stream()
-                    .map(purchaserDto -> purchaserDto.getId())
-                    .collect(Collectors.toList());
+            List<String> purchaserIds = new ArrayList<>();
+            if (companyDto.getPurchaserDtos() != null) {
+                purchaserIds = companyDto.getPurchaserDtos().stream()
+                        .map(purchaserDto -> purchaserDto.getId())
+                        .collect(Collectors.toList());
 
-            purchaserService.createIfNotExist(companyDto.getPurchaserDtos());
+                purchaserService.createIfNotExist(companyDto.getPurchaserDtos());
+            }
 
             Company company = companyMapper.mapToCompany(companyDto);
             company.setOrderId(getNextAvailableOrderId());
@@ -106,9 +109,8 @@ public class CompanyServiceImpl implements CompanyService {
             companyRepository.save(company);
             return new ResponseEntity<>(company, HttpStatus.OK);
         } catch (ObjectNotFoundException e) {
-            String errorMessage = "[ZEDAPP] Object with id = " + id + " not found!";
-            log.error(errorMessage);
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorMessage);
+            log.error(e.getMessage());
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
     }
 
@@ -117,60 +119,66 @@ public class CompanyServiceImpl implements CompanyService {
         try {
             Company company = companyRepository.findOrThrow(id);
             companyRepository.delete(company);
-            return new ResponseEntity(HttpStatus.OK);
+            return new ResponseEntity<>(HttpStatus.OK);
         } catch (ObjectNotFoundException e) {
-            String errorMessage = "[ZEDAPP] Object with id = " + id + " not found!";
-            log.error(errorMessage);
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorMessage);
+            log.error(e.getMessage());
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
 
     @Override
     public ResponseEntity deleteAll() {
         companyRepository.deleteAll();
-        return new ResponseEntity(HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @Override
-    public ResponseEntity getAll() {
+    public ResponseEntity<List<CompanyDto>> getAll() {
         List<CompanyDto> companies = companyMapper.mapToCompanyDtoList(companyRepository.findAll());
         return new ResponseEntity<>(companies, HttpStatus.OK);
     }
 
     @Override
-    public ResponseEntity getById(String id) {
-        Optional<Company> company = companyRepository.findById(id);
-        if (!company.isPresent()) {
-            String errorMessage = "[ZEDAPP] Company with id = " + id + " not found!";
-            log.error(errorMessage);
-            return ResponseEntity.status(HttpStatus.NO_CONTENT).body(errorMessage);
+    public ResponseEntity<CompanyDto> getById(String id) {
+        try {
+            Company company = companyRepository.findOrThrow(id);
+            return new ResponseEntity<>(companyMapper.mapToCompanyDto(company), HttpStatus.OK);
+        } catch (ObjectNotFoundException e) {
+            log.error(e.getMessage());
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-        return new ResponseEntity(companyMapper.mapToCompanyDto(company.get()), HttpStatus.OK);
     }
 
     @Override
-    public CompanyDto findByNip(String nip) {
-        return null;
+    public ResponseEntity<CompanyDto> getByNip(String nip) {
+        try {
+            Company company = companyRepository.findCompanyByNip(nip);
+            if (company == null) {
+                throw new ObjectNotFoundException("[ZEDAPP] Company with NIP = " + nip + " not found");
+            }
+            return new ResponseEntity<>(companyMapper.mapToCompanyDto(company), HttpStatus.OK);
+        } catch (ObjectNotFoundException e) {
+            log.error(e.getMessage());
+            return new ResponseEntity(HttpStatus.NOT_FOUND);
+        }
     }
 
     @Override
-    public List<CompanyDto> findByName(String name) {
-        return null;
+    public ResponseEntity<List<CompanyDto>> getByName(String name) {
+        List<Company> companies = companyRepository.findCompaniesByName(name);
+        return new ResponseEntity<>(companyMapper.mapToCompanyDtoList(companies), HttpStatus.OK);
     }
 
     @Override
-    public List<CompanyDto> findByStreet(String street) {
-        return null;
+    public ResponseEntity<List<CompanyDto>> getByZipCode(String zipCode) {
+        List<Company> companies = companyRepository.findCompaniesByZipCode(zipCode);
+        return new ResponseEntity<>(companyMapper.mapToCompanyDtoList(companies), HttpStatus.OK);
     }
 
     @Override
-    public List<CompanyDto> findByZipCode(String zipCode) {
-        return null;
-    }
-
-    @Override
-    public List<CompanyDto> findByCity(String city) {
-        return null;
+    public ResponseEntity<List<CompanyDto>> getByCity(String city) {
+        List<Company> companies = companyRepository.findCompaniesByCity(city);
+        return new ResponseEntity<>(companyMapper.mapToCompanyDtoList(companies), HttpStatus.OK);
     }
 
     public boolean checkPurchaserServiceAvailable() {
@@ -180,7 +188,7 @@ public class CompanyServiceImpl implements CompanyService {
         URI uri = UriComponentsBuilder.fromHttpUrl(URIConfig.PURCHASER_SERVICE_URL + "/checkStatus")
                 .build().encode().toUri();
         ResponseEntity<String> response = restTemplate.getForObject(uri, ResponseEntity.class);
-        if (response.getStatusCode().equals(HttpStatus.OK) && response.getBody().equals("ALIVE")) {
+        if (response.getStatusCode().equals(HttpStatus.OK)) {
             return true;
         }
         return false;

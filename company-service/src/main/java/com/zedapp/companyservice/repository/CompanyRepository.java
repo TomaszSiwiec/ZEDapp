@@ -10,16 +10,11 @@ import java.util.List;
 @Repository
 public interface CompanyRepository extends MongoRepository<Company, String> {
     default Company findOrThrow(String id) throws ObjectNotFoundException {
-        Company company = findById(id).orElseThrow(ObjectNotFoundException::new);
+        Company company = findById(id).orElseThrow(() -> new ObjectNotFoundException("[ZEDAPP] Company with id = " + id + " not found"));
         return company;
     }
     Company findCompanyByNip(String nip);
     List<Company> findCompaniesByName(String name);
-    List<Company> findCompaniesByStreet(String street);
     List<Company> findCompaniesByZipCode(String zipCode);
     List<Company> findCompaniesByCity(String city);
-    List<Company> findAllByOrderIdExists();
-    default boolean checkCompanyExists(String id) {
-        return findById(id) == null ? true : false;
-    }
 }

@@ -1,4 +1,4 @@
-package com.zedapp.companyservice.exception;
+package com.zedapp.purchaserservice.exception;
 
 public class DatabaseProblem extends Exception {
     public DatabaseProblem() {

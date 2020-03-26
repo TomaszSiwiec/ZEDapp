@@ -3,13 +3,16 @@ package com.zedapp.companyservice.mapper;
 import com.zedapp.companyservice.domain.Company;
 import com.zedapp.companyservice.dto.CompanyDto;
 import com.zedapp.companyservice.dto.PurchaserDto;
+import com.zedapp.companyservice.exception.ServiceConnectionProblemException;
 import com.zedapp.companyservice.service.implementation.PurchaserServiceImpl;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.*;
 import java.util.stream.Collectors;
 
+@Slf4j
 @Component
 public class CompanyMapper {
 
@@ -43,7 +46,11 @@ public class CompanyMapper {
         List<PurchaserDto> purchaserDtos = new ArrayList<>();
         if (!company.getPurchasersIds().isEmpty()) {
             for (String id : company.getPurchasersIds()) {
-                purchaserDtos.add(purchaserService.getById(id));
+                try {
+                    purchaserDtos.add(purchaserService.getById(id));
+                } catch (ServiceConnectionProblemException e) {
+                    log.error(e.getMessage());
+                }
             }
         }
 
