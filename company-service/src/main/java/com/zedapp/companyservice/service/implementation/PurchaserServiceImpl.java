@@ -62,4 +62,9 @@ public class PurchaserServiceImpl implements PurchaserService {
     public PurchaserDto createPurchaser(PurchaserDto purchaserDto) throws ServiceConnectionProblemException {
         return null;
     }
+
+    @Override
+    public List<PurchaserDto> getPurchasersByIds(List<String> ids) throws ServiceConnectionProblemException {
+        return new ArrayList<>();
+    }
 }
