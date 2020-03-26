@@ -181,6 +181,18 @@ public class CompanyServiceImpl implements CompanyService {
         return new ResponseEntity<>(companyMapper.mapToCompanyDtoList(companies), HttpStatus.OK);
     }
 
+    @Override
+    public ResponseEntity<CompanyDto> getByPurchaserId(String purchaserId) {
+        Optional<Company> company = companyRepository.findAll().stream()
+                .filter(company1 -> company1.getPurchasersIds().contains(purchaserId))
+                .findFirst();
+        if (company.isPresent()) {
+            return new ResponseEntity<>(companyMapper.mapToCompanyDto(company.get()), HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+
     public boolean checkPurchaserServiceAvailable() {
 
         RestTemplate restTemplate = new RestTemplate();

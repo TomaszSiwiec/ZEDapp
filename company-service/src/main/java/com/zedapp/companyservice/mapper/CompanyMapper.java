@@ -43,15 +43,12 @@ public class CompanyMapper {
     }
 
     public CompanyDto mapToCompanyDto(Company company) {
-        List<PurchaserDto> purchaserDtos = new ArrayList<>();
-        if (!company.getPurchasersIds().isEmpty()) {
-            for (String id : company.getPurchasersIds()) {
-                try {
-                    purchaserDtos.add(purchaserService.getById(id));
-                } catch (ServiceConnectionProblemException e) {
-                    log.error(e.getMessage());
-                }
-            }
+        List<PurchaserDto> purchaserDtos;
+        try {
+            purchaserDtos = purchaserService.getPurchasersByIds(company.getPurchasersIds());
+        } catch (ServiceConnectionProblemException e) {
+            log.error(e.getMessage());
+            purchaserDtos = new ArrayList<>();
         }
 
         CompanyDto companyDto = new CompanyDto();

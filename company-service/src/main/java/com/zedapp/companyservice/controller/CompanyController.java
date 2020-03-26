@@ -75,4 +75,10 @@ public class CompanyController {
     public ResponseEntity<List<CompanyDto>> getByCityName(@PathVariable("cityName") String cityName) {
         return companyService.getByCity(cityName);
     }
+
+    @GetMapping(value = "/getByPurchaserId/{purchaserId}",
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<CompanyDto> getByPurchaserId(@PathVariable("purchaserId") String purchaserId) {
+        return companyService.getByPurchaserId(purchaserId);
+    }
 }

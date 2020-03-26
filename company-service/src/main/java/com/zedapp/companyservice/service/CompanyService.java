@@ -27,4 +27,5 @@ public interface CompanyService {
 
     ResponseEntity<List<CompanyDto>> getByCity(String city);
 
+    ResponseEntity<CompanyDto> getByPurchaserId(String purchaserId);
 }

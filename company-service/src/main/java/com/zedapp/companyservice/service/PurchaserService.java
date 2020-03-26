@@ -13,4 +13,5 @@ public interface PurchaserService {
     List<PurchaserDto> getByTelNumber(String telNumber) throws ServiceConnectionProblemException;
     void createIfNotExist(List<PurchaserDto> purchaserDtos) throws ServiceConnectionProblemException;
     PurchaserDto createPurchaser(PurchaserDto purchaserDto) throws ServiceConnectionProblemException;
+    List<PurchaserDto> getPurchasersByIds(List<String> ids) throws ServiceConnectionProblemException;
 }
