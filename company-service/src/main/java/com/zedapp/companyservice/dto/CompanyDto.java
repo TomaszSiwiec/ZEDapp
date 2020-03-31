@@ -11,8 +11,6 @@ import java.util.List;
 public class CompanyDto implements Serializable {
     private String id;
 
-    private Long orderId;
-
     private String nip;
 
     private String name;

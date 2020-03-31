@@ -17,9 +17,6 @@ public class Company implements Serializable {
     private String id;
 
     @Indexed(unique = true)
-    private Long orderId;
-
-    @Indexed(unique = true)
     private String nip;
 
     private String name;

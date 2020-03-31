@@ -62,7 +62,6 @@ public class CompanyServiceImpl implements CompanyService {
             }
 
             Company company = companyMapper.mapToCompany(companyDto);
-            company.setOrderId(getNextAvailableOrderId());
             company.setPurchasersIds(purchaserIds);
             companyRepository.save(company);
 
@@ -204,28 +203,5 @@ public class CompanyServiceImpl implements CompanyService {
             return true;
         }
         return false;
-    }
-
-    private Long getNextAvailableOrderId() {
-        List<Company> companies = getCompaniesWithExistingOrderIdField();
-        if (companies.isEmpty()) {
-            return 1L;
-        }
-        Company lastAdded = Collections.max(companies, Comparator.comparingLong(company -> company.getOrderId()));
-        Long max = lastAdded.getOrderId() + 1;
-        return max;
-    }
-
-    private List<Company> getCompaniesWithExistingOrderIdField() {
-        List<Company> companies = companyRepository.findAll();
-        List<Company> filteredCompanies = new ArrayList<>();
-
-        for (Company company : companies) {
-            if (company.getOrderId() != null) {
-                filteredCompanies.add(company);
-            }
-        }
-
-        return filteredCompanies;
     }
 }
