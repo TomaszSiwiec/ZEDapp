@@ -42,7 +42,7 @@ public class PurchaserController {
 
     @GetMapping(value = "/getByTelNumber/{telNumber}",
             produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<PurchaserDto>> getByTelNumber(@PathVariable("telNumber")String telNumber) {
+    public ResponseEntity<List<PurchaserDto>> getByTelNumber(@PathVariable("telNumber") String telNumber) {
         return purchaserService.getByTelNumber(telNumber);
     }
 

@@ -13,6 +13,8 @@ public interface PurchaserRepository extends MongoRepository<Purchaser, String> 
     }
 
     List<Purchaser> findByName(String name);
+
     List<Purchaser> findByLastname(String lastName);
+
     List<Purchaser> findByTelNumber(String telNumber);
 }
