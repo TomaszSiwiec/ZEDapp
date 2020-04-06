@@ -1,10 +1,10 @@
-package com.zedapp.purchaserservice;
+package com.zedapp.elementservice;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class PurchaserServiceApplicationTests {
+class ElementServiceApplicationTests {
 
     @Test
     void contextLoads() {
