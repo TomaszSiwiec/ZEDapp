@@ -13,4 +13,5 @@ public interface OrderService {
     ResponseEntity<OrderDto> update(String id, OrderDto orderDto);
     ResponseEntity deleteById(String id);
     ResponseEntity deleteAll();
+    ResponseEntity<OrderDto> assignElement(String orderId, String elementId);
 }

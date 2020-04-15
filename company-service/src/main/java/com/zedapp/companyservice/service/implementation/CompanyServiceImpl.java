@@ -83,7 +83,7 @@ public class CompanyServiceImpl implements CompanyService {
     @Override
     public ResponseEntity update(String id, CompanyDto companyDto) {
         if (!checkPurchaserServiceAvailable()) {
-            String errorMessage = "[ZEDAPP] You are not able to edit Company with id = " + id +
+            String errorMessage = "[ZEDAPP] You are not able to edit Company with _id = " + id +
                     " due to Purchaser Service connection problem";
             log.error(errorMessage);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorMessage);

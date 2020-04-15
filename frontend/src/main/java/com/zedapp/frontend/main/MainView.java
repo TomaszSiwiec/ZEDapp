@@ -304,7 +304,7 @@ public class MainView extends VerticalLayout {
 
     private void deleteOrder(long id) throws UnknownHostException {
 //        RestTemplate restTemplate = new RestTemplate();
-//        final String baseURL = "http://" + Inet4Address.getLocalHost().getHostAddress() + ":8080/zedapp/order/delete?id=" + id;
+//        final String baseURL = "http://" + Inet4Address.getLocalHost().getHostAddress() + ":8080/zedapp/order/delete?_id=" + _id;
 //        URI url = UriComponentsBuilder.fromHttpUrl(baseURL)
 //                .build().encode().toUri();
 //
