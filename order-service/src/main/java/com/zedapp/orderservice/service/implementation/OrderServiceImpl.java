@@ -15,6 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
@@ -67,23 +68,21 @@ public class OrderServiceImpl implements OrderService {
             Order order = new Order();
             order.setInternalId(findMaxInternalId() + 1);
             order.setComment(orderDto.getComment());
-            order.setPurchaserId(orderDto.getPurchaser().getId());
+            String purchaserId = orderDto.getPurchaser() == null ? "" : orderDto.getPurchaser().getId();
+            order.setPurchaserId(purchaserId);
             order.setFilesIds(getFilesIds(orderDto.getFiles()));
             order.setElementsIds(getElementsIds(orderDto.getElements()));
             orderRepository.save(order);
             return new ResponseEntity<>(orderMapper.mapToOrderDto(order), HttpStatus.OK);
         } catch (Exception e) {
-            log.error(e.getMessage());
+            log.error(e.toString());
             return new ResponseEntity<>(HttpStatus.CONFLICT);
         }
     }
 
     private int findMaxInternalId() throws NoSuchElementException {
-        List<Order> orders = orderRepository.findAll();
-        List<Integer> ids = orders.stream()
+        return orderRepository.findAll().stream()
                 .map(order -> order.getInternalId())
-                .collect(Collectors.toList());
-        return ids.stream()
                 .max(Integer::compareTo)
                 .orElse(0);
     }
@@ -105,12 +104,18 @@ public class OrderServiceImpl implements OrderService {
     }
 
     private List<String> getElementsIds(List<ElementDto> elementDtos) {
+        if (elementDtos == null || elementDtos.isEmpty()) {
+            return new ArrayList<>();
+        }
         return elementDtos.stream()
                 .map(elementDto -> elementDto.getId())
                 .collect(Collectors.toList());
     }
 
     private List<String> getFilesIds(List<FileDto> fileDtos) {
+        if (fileDtos == null || fileDtos.isEmpty()) {
+            return new ArrayList<>();
+        }
         return fileDtos.stream()
                 .map(fileDto -> fileDto.getId())
                 .collect(Collectors.toList());
@@ -120,7 +125,7 @@ public class OrderServiceImpl implements OrderService {
     public ResponseEntity deleteById(String id) {
         try {
             Order order = orderRepository.findOrThrow(id);
-            orderRepository.deleteById(order.getId());
+            orderRepository.deleteById(order.get_id());
             return new ResponseEntity<>(HttpStatus.OK);
         } catch (ObjectNotFoundException e) {
             log.error(e.getMessage());
@@ -132,5 +137,42 @@ public class OrderServiceImpl implements OrderService {
     public ResponseEntity deleteAll() {
         orderRepository.deleteAll();
         return new ResponseEntity(HttpStatus.OK);
+    }
+
+    @Override
+    public ResponseEntity<OrderDto> assignElement(String orderInternalId, String elementId) {
+        try {
+            Order order = orderRepository.findByInternalIdOrThrow(orderInternalId);
+
+            if (order.getElementsIds().contains(elementId)) {
+                return new ResponseEntity<>(HttpStatus.CONFLICT);
+            }
+
+            List<String> elementsIds = order.getElementsIds();
+            elementsIds.add(elementId);
+            order.setElementsIds(elementsIds);
+            orderRepository.save(order);
+            return new ResponseEntity<>(orderMapper.mapToOrderDto(order), HttpStatus.OK);
+        } catch (ObjectNotFoundException e) {
+            log.error(e.getMessage());
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+
+    private List<String> addElementIfNotExistsInList(List<String> elements, String elementId) {
+        boolean exists = false;
+        List<String> resultList = new ArrayList<>();
+
+        for (String element : elements) {
+            if (element.equals(elementId)) {
+                exists = true;
+            }
+            resultList.add(element);
+        }
+
+        if (!exists) {
+            resultList.add(elementId);
+        }
+        return resultList;
     }
 }

@@ -26,6 +26,11 @@ public class OrderController {
         return orderService.getOrder(id);
     }
 
+    @GetMapping(value = "/getByIID/{id}")
+    public ResponseEntity<OrderDto> getByInternalId(@PathVariable(value = "id") String id) {
+        return orderService.getOrderByInternalId(id);
+    }
+
     @PostMapping(value = "/create")
     public ResponseEntity<OrderDto> create(@RequestBody OrderDto orderDto) {
         return orderService.create(orderDto);
@@ -35,6 +40,12 @@ public class OrderController {
     public ResponseEntity<OrderDto> update(@PathVariable(value = "id") String id,
                                            OrderDto orderDto) {
         return orderService.update(id, orderDto);
+    }
+
+    @PutMapping(value = "/assignElement/{orderInternalId}/{elementId}")
+    public ResponseEntity<OrderDto> assignElement(@PathVariable(value = "orderInternalId") String orderInternalId,
+                                                  @PathVariable(value = "elementId") String elementId) {
+        return orderService.assignElement(orderInternalId, elementId);
     }
 
     @DeleteMapping(value = "/delete/{id}")

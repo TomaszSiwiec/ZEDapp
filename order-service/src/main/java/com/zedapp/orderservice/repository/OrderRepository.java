@@ -11,7 +11,7 @@ import java.util.Optional;
 public interface OrderRepository extends MongoRepository<Order, String> {
     default Order findOrThrow(String id) throws ObjectNotFoundException {
         Order company = findById(id)
-                .orElseThrow(() -> new ObjectNotFoundException("[ZEDAPP] Order with id = " + id + " not found"));
+                .orElseThrow(() -> new ObjectNotFoundException("[ZEDAPP] Order with _id = " + id + " not found"));
         return company;
     }
 

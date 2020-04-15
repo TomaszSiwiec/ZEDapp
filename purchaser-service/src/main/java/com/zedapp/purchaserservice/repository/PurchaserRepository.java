@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface PurchaserRepository extends MongoRepository<Purchaser, String> {
     default Purchaser findOrThrow(String id) throws ObjectNotFoundException {
-        Purchaser purchaser = findById(id).orElseThrow(() -> new ObjectNotFoundException("[ZEDAPP] Purchaser with id = " + id + " not found"));
+        Purchaser purchaser = findById(id).orElseThrow(() -> new ObjectNotFoundException("[ZEDAPP] Purchaser with _id = " + id + " not found"));
         return purchaser;
     }
 

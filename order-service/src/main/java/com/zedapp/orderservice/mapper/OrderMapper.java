@@ -27,7 +27,8 @@ public class OrderMapper {
 
     public Order mapToOrder(OrderDto orderDto) {
         Order order = new Order();
-        order.setId(orderDto.getId());
+        order.set_id(orderDto.getId());
+        order.setInternalId(orderDto.getInternalId());
         order.setPurchaserId(orderDto.getPurchaser().getId());
         order.setComment(orderDto.getComment());
 
@@ -47,7 +48,8 @@ public class OrderMapper {
 
     public OrderDto mapToOrderDto(Order order) {
         OrderDto orderDto = new OrderDto();
-        orderDto.setId(order.getId());
+        orderDto.setId(order.get_id());
+        orderDto.setInternalId(order.getInternalId());
         orderDto.setPurchaser(purchaserServiceImpl.getPurchaserById(order.getPurchaserId()));
         orderDto.setComment(order.getComment());
         orderDto.setFiles(fileServiceImpl.getFilesByIds(order.getFilesIds()));

@@ -14,7 +14,7 @@ import java.util.List;
 @Document
 public class Company implements Serializable {
     @MongoId
-    private String id;
+    private String _id;
 
     @Indexed(unique = true)
     private String nip;

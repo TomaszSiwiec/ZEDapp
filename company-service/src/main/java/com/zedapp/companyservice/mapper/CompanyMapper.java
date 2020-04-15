@@ -27,7 +27,7 @@ public class CompanyMapper {
         }
 
         Company company = new Company();
-        company.setId(companyDto.getId());
+        company.set_id(companyDto.getId());
         company.setNip(companyDto.getNip());
         company.setName(companyDto.getName());
         company.setStreet(companyDto.getStreet());
@@ -51,7 +51,7 @@ public class CompanyMapper {
         }
 
         CompanyDto companyDto = new CompanyDto();
-        companyDto.setId(company.getId());
+        companyDto.setId(company.get_id());
         companyDto.setNip(company.getNip());
         companyDto.setName(company.getName());
         companyDto.setStreet(company.getStreet());
