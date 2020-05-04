@@ -2,7 +2,6 @@ rootProject.name = 'ZEDapp'
 include ":company-service"
 include ":element-service"
 include ":file-service"
-include ":frontend"
 include ":order-service"
 include ":purchaser-service"
 include ":service-registry"

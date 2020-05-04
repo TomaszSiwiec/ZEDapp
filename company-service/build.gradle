@@ -29,8 +29,11 @@ dependencies {
 //	implementation 'org.springframework.cloud:spring-cloud-gcp-starter-pubsub'
 //	implementation 'org.springframework.cloud:spring-cloud-gcp-starter-storage'
 	implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client'
+	
 	compileOnly 'org.projectlombok:lombok'
+	
 	annotationProcessor 'org.projectlombok:lombok'
+	
 	testImplementation('org.springframework.boot:spring-boot-starter-test') {
 		exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
 	}
